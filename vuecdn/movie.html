@@ -1,0 +1,72 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    <style>
+        .movieBoard{border: 1px solid #bbb;}
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <div v-show="isLoading" style="width: 100px;">
+            <div class="tenor-gif-embed" data-postid="15572297" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/loading-load-circle-buffering-waiting-gif-15572297">Loading Circle Sticker</a>from <a href="https://tenor.com/search/loading-stickers">Loading Stickers</a></div>
+    </div>
+        <input v-model="date"><button @click="getMovies(date)">test</button>
+        <div v-for="movie in movies" class="movieBoard">
+            <span v-text="movie.movieNm">영화명</span><span v-text="movie.movieCd" @click="movieInfo(movie.movieCd)">영화코드</span>
+        </div>
+        <div v-show="isNotEmpty">
+            <div>actors: <span v-for="actor in actors" v-text="'['+actor.peopleNm+'] '"></span></div>
+            <div>directors: <span v-for="director in directors" v-text="'['+director.peopleNm+'] '"></span></div>
+        </div>
+    </div>
+    <script>
+        const url = 'https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt='
+        let infoUrl = 'https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=f5eef3421c602c6cb7ea224104795888&movieCd=';
+        Vue.createApp({
+            data() { return { 
+                movies: [{}], 
+                actors: [{peopleNm:'홍길동'},{peopleNm:'김기자'}], 
+                directors:[{peopleNm:'나감독'},{peopleNm:'이감독'}],
+                isLoading: false,
+                date: '20240603',
+                isNotEmpty: false
+             }
+            },
+            methods:{
+                movieInfo(movieCd){
+                    console.log(movieCd);
+                    fetch(infoUrl+movieCd)
+                    .then(res=>res.json())
+                    .then(res=>{
+                        this.actors = res.movieInfoResult.movieInfo.actors
+                        this.directors = res.movieInfoResult.movieInfo.directors
+                        this.isNotEmpty = true;
+                    })
+                },
+                getMovies(dt){
+            this.isLoading=true;
+            fetch(url+dt)
+            .then(res=>res.json())
+            .then(res=>{
+                this.movies = res.boxOfficeResult.dailyBoxOfficeList;
+                this.isLoading=false;
+                this.isNotEmpty = false;
+            });
+        }
+
+            },
+        created(){
+            this.getMovies('20240603');
+        }
+        
+
+        })
+        .mount("#app")
+    </script>
+</body>
+</html>

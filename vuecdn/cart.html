@@ -1,0 +1,43 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+       <span v-text="item.name"></span><span v-text="item.price" ></span>
+       <input size="3" type="number" v-model.number = item.count @change="enterHandler" :min="0" max="10" step="1"><button @click="btnPlusHandler">+</button><button @click="btnMinusHandler">-</button>
+       <div>합계<span>{{totalPrice}}</span></div> 
+       <div v-show="item.count>0">
+        <button>장바구니</button><button>주문하기</button>
+    </div>
+    </div>
+    <script>
+        const {createApp} = Vue;
+        // == Vue.createApp
+        createApp({
+            data(){
+                return {item:{name : '볼펜', price : 2000, count : 0}}
+            },
+            computed:{
+                totalPrice(){return this.item.price * this.item.count}
+            },
+            methods:{
+                btnPlusHandler(){
+                    this.item.count += 1;
+                    
+                },
+                btnMinusHandler(){
+                    this.item.count = this.item.count-1>0?this.item.count-1:this.item.count;
+                    
+                },
+                enterHandler(){}
+            }
+            
+        }).mount("#app")
+        //vue객체 생성
+    </script>
+</body>
+</html>

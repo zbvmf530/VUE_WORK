@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div>사원명: <span v-text="emp.empName"></span></div>
+        <div>부서명: {{emp.dept}}</div>
+        <div><img v-bind:src="emp.profile"></div>
+        <div @click="btnParentHandler">
+            <button type ="button" @click.stop="btnInfoHandler">조회</button>
+            <a href="index.html" @click.prevent.stop="aHandler">조회</a>
+        </div>
+    </div>
+    <script>
+        const {createApp} = Vue;
+        // == Vue.createApp
+        createApp({
+            data(){
+                return {emp:{empName : 'kim', dept : '개발', profile : 'profile.png'}}
+            },
+            mounted(){console.log('mounted')},
+            created(){console.log('created')},
+            updated(){console.log('updated')},
+            methods:{
+                btnInfoHandler(){alert(this.emp.empName)},
+                btnParentHandler(){alert('부모이벤트발생')},
+                aHandler(){alert('a태그 클릭')}
+            }
+            
+        }).mount("#app")
+        //vue객체 생성
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input v-model.trim="inputNum">
+        <button @click="addItemHandler">추가</button>
+        <button @click="findHandler">검색</button>
+        <button @click="removeAllHandler">모두삭제</button>
+        <button @click="sortFruitHandler">정렬</button>
+
+        <div style="height: 200px;">
+            <ul>
+                <li v-for="fruit in arr" v-text="fruit"></li>
+            </ul>
+        </div>
+        
+    </div>
+    <script>
+        Vue.createApp({
+            data() { return {inputNum : '오렌지', arr : ['바나나','사과'] };  },
+            methods : {
+                addItemHandler(){
+                    if(this.inputNum!='')
+                    {
+                        this.arr.push(this.inputNum);
+                        this.inputNum ='';
+                    }
+                },
+                removeAllHandler(){this.arr = [];},
+
+                sortFruitHandler(){this.arr.sort();},
+                findHandler(){
+                    if(this.arr.find(ele => ele == this.inputNum) == null) alert('검색 결과 없음');
+                    else alert(this.inputNum+'는 리스트의 '+(this.arr.indexOf(this.inputNum)+1)+'번째에 있습니다.');
+                }
+            }
+        })
+        .mount("#app")
+    </script>
+</body>
+</html>
